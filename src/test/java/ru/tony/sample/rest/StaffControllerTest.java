@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.tony.sample.database.entity.Staff;
+import ru.tony.sample.database.entity.StaffRole;
 import ru.tony.sample.service.StaffService;
 
 import java.util.Collections;
@@ -57,7 +58,7 @@ public class StaffControllerTest {
     }
 
     @Test
-    public void shouldCallSaveStaffWithCorrectParams() throws Exception {
+    public void shouldCallCreateStaffWithCorrectParams() throws Exception {
 
         mockMvc.perform(post("/rest/staff/create")
                         .contentType(APPLICATION_JSON)
@@ -67,5 +68,26 @@ public class StaffControllerTest {
         verify(staffService, times(1)).create(staffArgumentCaptor.capture());
         assertEquals("Ivan", staffArgumentCaptor.getValue().getName());
         assertEquals(ADMIN, staffArgumentCaptor.getValue().getRole());
+    }
+
+    @Test
+    public void shouldCallUpdateStaffWithCorrectParams() throws Exception {
+        mockMvc.perform(post("/rest/staff/update")
+                .contentType(APPLICATION_JSON)
+                .content(" { \"id\":\"2\",\"name\":\"Ivan\", \"role\":\"ADMIN\"}"))
+                .andExpect(status().isOk());
+
+        verify(staffService, times(1)).update(staffArgumentCaptor.capture());
+        assertEquals("Ivan", staffArgumentCaptor.getValue().getName());
+        assertEquals(ADMIN, staffArgumentCaptor.getValue().getRole());
+        assertEquals(2L, staffArgumentCaptor.getValue().getId().longValue());
+    }
+
+    @Test
+    public void shouldReturnCorrectListOfValues() throws Exception {
+        mockMvc.perform(get("/rest/staff/roles"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(StaffRole.values().length)))
+                .andExpect(jsonPath("$[0]", is(StaffRole.values()[0].toString())));
     }
 }

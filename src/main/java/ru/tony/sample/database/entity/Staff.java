@@ -2,13 +2,20 @@ package ru.tony.sample.database.entity;
 
 import ru.tony.sample.audit.AuditedEntity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
 public class Staff implements AuditedEntity,  Serializable{
 
-    private String name;
-    private StaffRole role;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "staff_sequence")
+    @SequenceGenerator(name="staff_sequence", sequenceName = "staff_sequence")
     private Long id;
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private StaffRole role;
 
     public String getName() {
         return name;

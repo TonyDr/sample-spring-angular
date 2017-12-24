@@ -1,0 +1,19 @@
+<div class="section">
+    <h3>{{headingTitle}}</h3>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Action</th>
+            <th>Object Name</th>
+            <th>Object Id</th>
+            <th>Action Time</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="val in audit">
+            <td>{{val.type}}</td>
+            <td>{{val.objectName}}</td>
+            <td>{{val.recordId}}</td>
+            <td>{{val.time}}</td>
+        </tr>
+    </table>
+</div>

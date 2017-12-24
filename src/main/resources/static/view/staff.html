@@ -1,0 +1,39 @@
+<div class="section">
+    <h3>{{headingTitle}}</h3>
+
+    <form ng-submit="processStaffDetails()">
+        <div class="table-responsive">
+            <input type="hidden" id="id" ng-model="staffForm.id" size="30" />
+            <table class="table table-bordered" style="width: 600px">
+                <tr>
+                    <td>Name</td>
+                    <td><input type="text" id="name" ng-model="staffForm.name" size="30" /></td>
+                </tr>
+                <tr>
+                    <td>Role</td>
+                    <td><input type="text" id="role" ng-model="staffForm.role"
+                               size="30" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="submit"
+                                           class="btn btn-primary btn-sm" ng-click="processStaff()"
+                                           value="Create / Update User" /></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+            </tr>
+        </thead>
+        <tr ng-repeat="val in staffList">
+            <td>{{val.name}}</td>
+            <td>{{val.role}}</td>
+            <td><a ng-click="editStaff(val)" class="btn btn-primary btn-sm">Edit</a>
+                | <a ng-click="deleteStaff(val)" class="btn btn-danger btn-sm">Delete</a></td>
+        </tr>
+    </table>
+</div>

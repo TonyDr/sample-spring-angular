@@ -24,7 +24,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     public List<Staff> getStaffList() {
-        return null;
+        return repository.findAll();
     }
 
     @Override

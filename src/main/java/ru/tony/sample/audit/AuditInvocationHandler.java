@@ -5,6 +5,8 @@ import ru.tony.sample.database.repository.AuditRepository;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class AuditInvocationHandler implements InvocationHandler {
     private final AuditRepository auditRepository;
@@ -27,6 +29,7 @@ public class AuditInvocationHandler implements InvocationHandler {
             auditRecord.setType(auditType);
             auditRecord.setRecordId(((AuditedEntity)invoke).getId());
             auditRecord.setObjectName(invoke.getClass().getName());
+            auditRecord.setTime(new Timestamp(new Date().getTime()));
             auditRepository.save(auditRecord);
         }
         return invoke;
