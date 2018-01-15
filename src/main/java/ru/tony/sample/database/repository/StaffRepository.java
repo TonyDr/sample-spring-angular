@@ -5,4 +5,5 @@ import ru.tony.sample.database.entity.Staff;
 
 
 public interface StaffRepository extends JpaRepository<Staff, Long> {
+    Staff findByNameAndPassword(String login, String password);
 }

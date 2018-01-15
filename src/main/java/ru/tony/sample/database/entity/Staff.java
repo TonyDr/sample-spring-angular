@@ -14,6 +14,8 @@ public class Staff implements AuditedEntity,  Serializable{
     private Long id;
     private String name;
 
+    private String password;
+
     @Enumerated(EnumType.STRING)
     private StaffRole role;
 
@@ -39,5 +41,13 @@ public class Staff implements AuditedEntity,  Serializable{
 
     public Long getId() {
         return id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
