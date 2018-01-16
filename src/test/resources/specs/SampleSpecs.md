@@ -1,5 +1,5 @@
 <div>
-    <e:browser url="google.com">
-            <step name="hasText">Google</step>
+    <e:browser url="#/audit">
+            <step name="hasText">Audit List</step>
     </e:browser>
 </div>        

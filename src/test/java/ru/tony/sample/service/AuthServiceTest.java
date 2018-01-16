@@ -8,6 +8,8 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -29,6 +31,7 @@ import static ru.tony.sample.database.entity.StaffRole.ADMIN;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
+@ActiveProfiles("authTest")
 public class AuthServiceTest {
 
     private static final String USER = "user";
@@ -92,6 +95,7 @@ public class AuthServiceTest {
     }
 
     @Configuration
+    @Profile("authTest")
     public static class ContextConfiguration {
 
         @Bean
