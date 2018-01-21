@@ -18,7 +18,7 @@ import java.util.Properties;
 @Configuration
 @EnableJpaRepositories(basePackages = "ru.tony.sample.database.repository")
 @EnableTransactionManagement
-@PropertySource("db.connection.properties")
+@PropertySource("classpath:db.connection.properties")
 public class DBConnectionConfiguration {
 
     private static final String DATABASE_PACKAGE = "ru.tony.sample.database";
