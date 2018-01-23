@@ -27,16 +27,27 @@ public class AuthTokenRepositoryTest {
 
     @Test
     public void shouldCorrectSaveAuthToken() {
-        Staff staff = repository.getOne(1L);
+        AuthToken token = crateAuthToken("testToken");
+        token = tokenRepository.findOne(token.getId());
+        assertNotNull(token);
+    }
 
+    @Test
+    public void shouldReturnByToken() {
+        String testTokenString = "testTokenString";
+        crateAuthToken(testTokenString);
+        AuthToken token = tokenRepository.findByToken(testTokenString);
+        assertNotNull(token);
+    }
+
+    private AuthToken crateAuthToken(String testToken) {
+        Staff staff = repository.getOne(1L);
         AuthToken token = new AuthToken();
-        token.setToken("testToken");
+        token.setToken(testToken);
         token.setExpireTime(new Date());
         token.setStaff(staff);
 
         token = tokenRepository.save(token);
-
-        token = tokenRepository.findOne(token.getId());
-        assertNotNull(token);
+        return token;
     }
 }

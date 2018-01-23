@@ -8,40 +8,53 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import ru.tony.sample.configuration.filter.TokenAuthenticationFilter;
+import ru.tony.sample.configuration.filter.TokenAuthenticationManager;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public Http401AuthenticationEntryPoint securityException401EntryPoint(){
-        return new Http401AuthenticationEntryPoint("");
-    }
-
     @Autowired
     private Http401AuthenticationEntryPoint authEntrypoint;
 
+    @Autowired
+    private TokenAuthenticationManager tokenAuthenticationManager;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.addFilterBefore(tokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests()
                 .antMatchers("/").anonymous()
-                .antMatchers("/api/staff/*").authenticated()
-                .antMatchers("/api/audit/*").authenticated()
+                .antMatchers("/login").permitAll()
+                .antMatchers("/rest/staff/*").hasRole("ADMIN")
+                .antMatchers("/rest/audit/*").hasAnyRole("ADMIN", "USER")
             .and()
-                .formLogin()
-                .loginPage("/api/auth")
-                .permitAll()
-            /*.and()
                 .csrf()
                 .disable()
-                .headers()*/
+                .headers()
             .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .logout()
                 .permitAll()
+
             .and()
                 .exceptionHandling().authenticationEntryPoint(authEntrypoint);
+    }
+
+    @Bean
+    public TokenAuthenticationFilter tokenFilter() {
+        TokenAuthenticationFilter filter = new TokenAuthenticationFilter();
+        filter.setAuthenticationManager(tokenAuthenticationManager);
+        return filter;
+    }
+
+    @Bean
+    public Http401AuthenticationEntryPoint securityException401EntryPoint(){
+        return new Http401AuthenticationEntryPoint("");
     }
 }

@@ -34,7 +34,7 @@ public class AuthControllerTest {
     public void shouldCorrectAuthorizeUser() throws Exception {
         when(authService.authorize(eq("user"), eq("password"))).thenReturn("token");
 
-        String result = mockMvc.perform(post("/rest/login").
+        String result = mockMvc.perform(post("/login").
                 contentType(APPLICATION_JSON)
                 .content("{\"login\":\"user\", \"password\":\"password\"}"))
                 .andExpect(status().isOk())

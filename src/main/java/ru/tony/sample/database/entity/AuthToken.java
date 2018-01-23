@@ -10,14 +10,14 @@ public class AuthToken {
     @GeneratedValue
     private Long id;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String token;
 
     @ManyToOne
     @JoinColumn(name="staff", nullable=false)
     private Staff staff;
 
-    @Column
+    @Column(nullable = false)
     private Date expireTime;
 
     public String getToken() {

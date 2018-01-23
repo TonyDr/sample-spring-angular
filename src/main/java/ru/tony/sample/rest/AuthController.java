@@ -9,7 +9,7 @@ import ru.tony.sample.rest.request.AuthRequest;
 import ru.tony.sample.service.AuthService;
 
 @RestController
-@RequestMapping("/rest")
+@RequestMapping("/")
 public class AuthController {
 
     private AuthService service;
