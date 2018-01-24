@@ -32,6 +32,15 @@ public class SecurityTest {
                 .andExpect(status().is(401));
     }
 
+    @Test
+    public void requestShouldFailForIncorrectTokenInHeader() throws Exception {
+        mvc.perform(get("/rest/staff/list").header("auth-token", "incorrect-token"))
+                .andExpect(status().is(401));
+
+        mvc.perform(get("/rest/audit/list").header("auth-token", "incorrect-token"))
+                .andExpect(status().is(401));
+    }
+
 
     @Test
     public void requestShouldPassCorrectForAuthorizedAdmin() throws Exception {
@@ -55,7 +64,7 @@ public class SecurityTest {
                 .andReturn().getResponse().getContentAsString();
 
         mvc.perform(get("/rest/staff/list").header("auth-token", token))
-                .andExpect(status().is(401));
+                .andExpect(status().is(403));
 
         mvc.perform(get("/rest/audit/list").header("auth-token", token))
                 .andExpect(status().is(200));

@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
  * sbt-dranitsyn-as
  * 23.01.2018
  */
-public class TokenAuthenticationManagerTest {
+public class TokenAuthenticationServiceTest {
 
 
     @Rule
@@ -32,7 +32,7 @@ public class TokenAuthenticationManagerTest {
 
 
     private AuthTokenRepository authTokenRepository;
-    private TokenAuthenticationManager sut;
+    private TokenAuthenticationService sut;
     private UserDetailsService userDetailsService;
 
 
@@ -40,7 +40,7 @@ public class TokenAuthenticationManagerTest {
     public void beforeMethod() {
         authTokenRepository = mock(AuthTokenRepository.class);
         userDetailsService = mock(UserDetailsService.class);
-        sut = new TokenAuthenticationManager(authTokenRepository, userDetailsService);
+        sut = new TokenAuthenticationService(authTokenRepository, userDetailsService);
     }
 
     @Test

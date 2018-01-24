@@ -22,7 +22,7 @@ public class TokenAuthentication implements Authentication {
         this.token = token;
     }
 
-    TokenAuthentication(String token, User user, boolean authorized, Collection<GrantedAuthority> authorities) {
+    TokenAuthentication(String token, UserDetails user, boolean authorized, Collection<? extends GrantedAuthority> authorities) {
         this.token = token;
         this.principal = user;
         this.isAuthenticated = authorized;

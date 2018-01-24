@@ -9,19 +9,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import ru.tony.sample.configuration.filter.TokenAuthenticationFilter;
-import ru.tony.sample.configuration.filter.TokenAuthenticationManager;
+import ru.tony.sample.configuration.filter.TokenAuthenticationService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private Http401AuthenticationEntryPoint authEntrypoint;
-
-    @Autowired
-    private TokenAuthenticationManager tokenAuthenticationManager;
+    private TokenAuthenticationService tokenAuthenticationService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -29,8 +24,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").anonymous()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/rest/staff/*").hasRole("ADMIN")
-                .antMatchers("/rest/audit/*").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/rest/staff/**").hasAuthority("ADMIN")
+                .antMatchers("/rest/audit/**").hasAnyAuthority("ADMIN", "USER")
             .and()
                 .csrf()
                 .disable()
@@ -41,20 +36,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .logout()
                 .permitAll()
-
             .and()
-                .exceptionHandling().authenticationEntryPoint(authEntrypoint);
+                .exceptionHandling().authenticationEntryPoint(securityException401EntryPoint());
     }
 
     @Bean
     public TokenAuthenticationFilter tokenFilter() {
-        TokenAuthenticationFilter filter = new TokenAuthenticationFilter();
-        filter.setAuthenticationManager(tokenAuthenticationManager);
-        return filter;
+        return new TokenAuthenticationFilter(tokenAuthenticationService);
     }
 
     @Bean
     public Http401AuthenticationEntryPoint securityException401EntryPoint(){
         return new Http401AuthenticationEntryPoint("");
+    }
+
+    @Autowired
+    public void setTokenAuthenticationService(TokenAuthenticationService tokenAuthenticationService) {
+        this.tokenAuthenticationService = tokenAuthenticationService;
     }
 }
